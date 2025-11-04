@@ -1,0 +1,36 @@
+name: App_tracker Deployment
+on:
+  push:
+    branches:
+     - master
+  pull_request:
+
+jobs:
+  Test_code:
+    runs-on: ubuntu-latest
+    steps:
+      - name: get code
+        uses: actions/checkout@v4
+      - name: setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: install dependencies
+        run: npm ci
+      - name: run test
+        run: npm test
+
+  run_server:
+    runs-on: ubuntu-latest
+    needs: Test_code
+    steps:
+      - name: get code
+        uses: actions/checkout@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: install dependencies
+        run: npm ci
+      - name: Start server
+        run: npm Start
