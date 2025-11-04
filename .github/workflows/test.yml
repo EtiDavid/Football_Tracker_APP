@@ -35,4 +35,4 @@ jobs:
       - name: install dependencies
         run: npm ci
       - name: Start server
-        run: npm Start
+        run: npm start
