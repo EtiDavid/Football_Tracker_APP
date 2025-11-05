@@ -5,9 +5,11 @@ on:
      - master
   pull_request:
 
+
 jobs:
   Test_code:
     runs-on: ubuntu-latest
+    environment: football_tracker
     steps:
       - name: get code
         uses: actions/checkout@v4
@@ -40,7 +42,11 @@ jobs:
 
   run_server:
     runs-on: ubuntu-latest
+    environment: football_tracker
     needs: Test_code
+    env:
+        MONGODB_URI: ${{ secrets.MONGODB_URI }}
+
     steps:
       - name: get code
         uses: actions/checkout@v4

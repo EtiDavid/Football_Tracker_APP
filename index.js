@@ -1,11 +1,32 @@
+require('dotenv').config();
 const express = require('express');
+const mongoose = require('mongoose');
 const app = express();
 
 
-const matches = [
-  { id: 1, home: 'Arsenal', away: 'Chelsea', score: '2-1' },
-  { id: 2, home: 'Barcelona', away: 'PSG', score: '3-3' }
-];
+
+
+//const matches = [
+  //{ id: 1, home: 'Arsenal', away: 'Chelsea', score: '2-0' },
+  //{ id: 2, home: 'Barcelona', away: 'PSG', score: '3-3' }
+//];
+
+// MongoDB connection
+mongoose.connect(process.env.MONGODB_URI)
+   .then(() => {
+    console.log('✅ Connected to MongoDB');
+    console.log('📦 Database:', mongoose.connection.name);
+  })
+  .catch(err => console.error('❌ MongoDB connection error:', err));
+
+// Schema + Model
+const matchSchema = new mongoose.Schema({
+  home: String,
+  away: String,
+  score: String
+});
+
+const Match = mongoose.model('matches', matchSchema);
 
 // Root route
 app.get('/', (req, res) => {
@@ -13,14 +34,16 @@ app.get('/', (req, res) => {
 });
 
 // Matches route
-app.get('/matches', (req, res) => {
+//app.get('/matches', (req, res) => {
+  //res.json(matches);
+//});
+app.get('/matches', async (req, res) => {
+  console.log('📡 Fetching matches from MongoDB...');
+  const matches = await Match.find();
   res.json(matches);
 });
 
-// Start server
-//app.listen(PORT, () => {
-  //console.log(`Server running on http://localhost:${PORT}`);
-//});
+
 
 module.exports = app;
 
