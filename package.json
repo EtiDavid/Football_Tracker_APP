@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "build": "./scripts/build.sh"
   },
   "keywords": [],
   "author": "",
