@@ -10,6 +10,8 @@ jobs:
   Test_code:
     runs-on: ubuntu-latest
     environment: football_tracker
+    env:
+      MONGODB_URI: ${{ secrets.MONGODB_URI }}
     steps:
       - name: get code
         uses: actions/checkout@v4
@@ -47,6 +49,7 @@ jobs:
     env:
         MONGODB_URI: ${{ secrets.MONGODB_URI }}
 
+
     steps:
       - name: get code
         uses: actions/checkout@v4
@@ -60,6 +63,17 @@ jobs:
 
       - name: install dependencies
         run: npm ci
+
+      - name: Debug MONGODB_URI presence
+        run: |
+          if [ -z "$MONGODB_URI" ]; then
+            echo "❌ MONGODB_URI is empty"
+            exit 1
+          else
+            echo "✅ MONGODB_URI is loaded"
+            echo "Length: ${#MONGODB_URI}"
+          fi
+
 
       - name: Start server and call url
         run: |
