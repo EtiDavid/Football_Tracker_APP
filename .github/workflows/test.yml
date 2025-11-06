@@ -158,6 +158,7 @@ jobs:
           pip install python-dotenv
 
       - name: backup_code
+        id: backup
         run: python3 backup.py
 
       - name: save time details
@@ -168,12 +169,24 @@ jobs:
       - name: upload backup Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: backup-${{env.artifact_time}}
+          name: backup-${{ env.artifact_time }}
           path: backup.json
 
+      - name: backup failure report
+        id: error-report
+        if: failure() && steps.backup.outcome == 'failure'
+        run: |
+          echo "the repo name: ${{ github.repository }}" >> log.txt
+          echo "the branch name: ${{ github.ref_name }}" >> log.txt
+          echo "the time: ${{ github.run_started_at }}" >> log.txt
+          echo "Workflow URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> log.txt
 
-          
-
+      - name: upload error
+        if: steps.error-report.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: error report-${{ env.artifact_time }}
+          path: log.txt
 
   report:
     runs-on: ubuntu-latest
