@@ -159,7 +159,7 @@ jobs:
 
       - name: backup_code
         id: backup
-        run: python3 backup.py
+        run: pythons3 backup.py
 
       - name: save time details
         run: |
