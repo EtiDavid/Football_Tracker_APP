@@ -184,14 +184,14 @@ jobs:
 
       - name: upload error
         id: upload-error
-        if: steps.error-report.outcome == 'success'
+        if: failure() && steps.error-report.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: error report-${{ env.artifact_time }}
           path: log.txt
 
       - name: send email if backup fails
-        if: steps.upload-error.outcome == 'success'
+        if: failure() && steps.upload-error.outcome == 'success'
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
@@ -211,7 +211,7 @@ jobs:
       - name: send discord message if backup fails
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-        if: steps.upload-error.outcome == 'success'
+        if: failure() && steps.upload-error.outcome == 'success'
         run: |
           echo "Backup job failed for:" >> discord.txt
           echo "Repository: ${{ github.repository }}" >> discord.txt
