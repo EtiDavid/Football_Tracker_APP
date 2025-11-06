@@ -44,7 +44,7 @@ jobs:
       - name: upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: test-result
+          name: test-result-${{ github.job }}
           path: test-results.json
 
 
