@@ -28,4 +28,4 @@ with open("backup.json", "w") as f:
 
 print("✅ Backup saved as backup.json")
 
-exit(1)
+
