@@ -1,0 +1,26 @@
+name: "Node + dependencies."
+description: "for node and dependencies"
+inputs:
+  node-version:
+    description: "what node version"
+    required: true
+  cache-dependency-path:
+    description: "Tells GitHub Actions which files to track for dependency caching."
+    required: false
+    default: '**/package-lock.json'
+runs:
+  using: composite
+  steps:
+    - name: Setup Node
+      uses: actions/setup-node@v5
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: 'npm'
+        cache-dependency-path: ${{ inputs.cache-dependency-path }}
+
+
+    - name: Install dependencies
+      id: cache
+      run: |
+        npm ci
+      shell: bash

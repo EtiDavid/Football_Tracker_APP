@@ -55,5 +55,6 @@ jobs:
       attach: "${{ needs.backup.outputs.results }}"
 
   Report:
+    needs: Notification
     if: failure()
     uses: ./.github/workflows/report.yml
