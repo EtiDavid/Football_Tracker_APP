@@ -43,7 +43,7 @@ jobs:
 
   Notification:
     if: always()
-    needs: [Testing Run_Server Build Deploy Backup ]
+    needs: [Testing, Run_Server, Build,Deploy, Backup ]
     uses: ./.github/workflows/notify.yml
     secrets:
       EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
