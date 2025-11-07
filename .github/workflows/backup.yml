@@ -4,6 +4,9 @@ on:
   schedule:
     - cron: "0 2 * * *"
   workflow_call:
+    secrets:
+      mongodb_uri:
+        required: false
     inputs:
       mongodb_uri:
         description: "MongoDB connection string"

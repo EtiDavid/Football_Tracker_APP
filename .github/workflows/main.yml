@@ -24,6 +24,8 @@ jobs:
   Run_Server:
     needs: Testing
     uses: ./.github/workflows/Run_Server.yml
+    secrets:
+      mongodb_uri: ${{ secrets.MONGODB_URI }}
 
   Build:
     needs: Run_Server
@@ -36,11 +38,16 @@ jobs:
   Backup:
     needs: Deploy
     uses: ./.github/workflows/backup.yml
+    secrets:
+      mongodb_uri: ${{ secrets.MONGODB_URI }}
 
   Notification:
     if: always()
     needs: Backup
     uses: ./.github/workflows/notify.yml
+    secrets:
+      EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+      EMAIL_USERNAME: ${{ secrets.EMAIL_USERNAME }}
     with:
       job_summary: ${{ toJson(needs) }}
       receivers_email: "dayvidchimere@gmail.com"

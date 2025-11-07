@@ -2,6 +2,11 @@ name: Notify on error
 
 on:
   workflow_call:
+    secrets:
+      EMAIL_USERNAME:
+        required: true
+      EMAIL_PASSWORD:
+        required: true
     inputs:
       receivers_email:
         description: "Email of the person expecting the log details"

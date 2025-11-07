@@ -2,15 +2,11 @@ name: Run_server
 on:
   workflow_call:
     secrets:
+      description: "Enter the secret details for mongodb"
       mongodb_uri:
-        required: false
+        required: true
 
     inputs:
-      mongodb_uri:
-        description: "Enter the secret details for mongodb"
-        required: false
-        type: string
-
       node-version:
         description: "Node version(s)"
         required: false
