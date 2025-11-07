@@ -2,6 +2,9 @@ name: Testing
 
 on:
   workflow_call:
+    secrets:
+      MONGODB_URI:
+        required: false
     inputs:
       mongodb_uri:
         description: "Enter MongoDB connection string"

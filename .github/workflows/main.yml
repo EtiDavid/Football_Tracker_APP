@@ -18,7 +18,7 @@ defaults:
 jobs:
   Testing:
     uses: ./.github/workflows/Testing.yml
-    with:
+    secrets:
       mongodb_uri: ${{ secrets.MONGODB_URI }}
 
   Run_Server:
@@ -40,7 +40,6 @@ jobs:
   Notification:
     if: always()
     needs: Backup
-    continue-on-error: true
     uses: ./.github/workflows/notify.yml
     with:
       job_summary: ${{ toJson(needs) }}
