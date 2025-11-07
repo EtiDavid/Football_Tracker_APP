@@ -30,7 +30,7 @@ on:
         description: " any file to attach"
         required: false
         type: string
-        default: "report.txt"
+        default: "report"
 
 jobs:
   notify_on_error:
@@ -47,11 +47,19 @@ jobs:
       - name: Convert JSON to text report
         run: |
           echo "🧩 Job Summary Report" > report.txt
-          cat job_summary.json | jq -r 'to_entries[] | "\(.key): \(.value.result)"' >> report.txt
-          echo "Repository: ${{ github.repository }}" >> report.txt
-          echo "Branch: ${{ github.ref_name }}" >> report.txt
-          echo "Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> report.txt
+          cat job_summary.json | jq -r 'to_entries[] | "\(.key): \(.value.result)"' >> ${{inputs.attach}}.txt
+          echo "Repository: ${{ github.repository }}" >> ${{inputs.attach}}.txt
+          echo "Branch: ${{ github.ref_name }}" >> ${{inputs.attach}}.txt
+          echo "Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> ${{inputs.attach}}.txt
           cat report.txt
+
+      - name: Read report content
+        id: read_file
+        run: |
+          CONTENT=$(cat "${{ inputs.attach }}.txt")
+          echo "body<<EOF" >> $GITHUB_OUTPUT
+          echo "$CONTENT" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Send email
         uses: dawidd6/action-send-mail@v3
@@ -63,9 +71,8 @@ jobs:
           subject: "⚠️ Job Summary Report - ${{ github.repository }}"
           to: ${{ inputs.receivers_email || secrets.EMAIL_TO }}
           from: "CI Bot <${{ secrets.EMAIL_USERNAME }}>"
-          body: |
-            $(cat report.txt)
-          attachments: ${{inputs.attach}}
+          body: ${{ steps.read_file.outputs.body }}
+          attachments: ${{inputs.attach}}.txt
 
       - name: Send Discord message
         env:
@@ -73,5 +80,5 @@ jobs:
         run: |
           curl -H "Content-Type: application/json" \
                -X POST \
-               -d "$(jq -n --arg content "$(cat report.txt)" '{content: $content}')" \
+               -d "$(jq -n --arg content "$(cat ${{inputs.attach}}.txt)" '{content: $content}')" \
                $DISCORD_WEBHOOK
