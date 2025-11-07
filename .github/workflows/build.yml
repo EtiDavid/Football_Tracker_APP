@@ -15,7 +15,9 @@ on:
         default: ubuntu-latest
 
     outputs:
-      outcomes: ${{ jobs.build.outputs.artifact_path}}
+      results:
+        description: "Artifact"
+        value: ${{ jobs.build.outputs.artifact_path}}
 jobs:
   build:
     outputs:

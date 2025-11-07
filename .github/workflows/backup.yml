@@ -15,7 +15,9 @@ on:
         type: string
         default: ubuntu-latest
     outputs:
-      results: ${{ jobs.Backup.outputs.outcomes }}
+      results:
+        description: "Backup"
+        value: ${{ jobs.Backup.outputs.outcomes }}
 
 jobs:
   Backup:
@@ -26,7 +28,7 @@ jobs:
       MONGODB_URI: ${{ inputs.mongodb_uri || secrets.MONGODB_URI }}
     strategy:
       matrix:
-        os: ${{ fromJSON(format('["{0}"]', join(split(inputs.os-version, ','), '","'))) }}
+        os: ${{ fromJSON(inputs.os-version) }}
     runs-on: ${{ matrix.os }}
 
     steps:

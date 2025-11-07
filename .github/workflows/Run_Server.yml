@@ -25,7 +25,8 @@ on:
         type: string
         default: '3000'
     outputs:
-      status: ${{ jobs.run_server.outputs.result }}
+      results:
+        value: ${{ jobs.run_server.outputs.result }}
 jobs:
   run_server:
     outputs:

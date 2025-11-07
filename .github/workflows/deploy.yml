@@ -8,7 +8,9 @@ on:
         type: string
         default: ubuntu-latest
 
-    outputs: ${{jobs.deploy.outputs.page_url}}
+    outputs:
+      results:
+        value: ${{jobs.deploy.outputs.page_url}}
 jobs:
   deploy:
     outputs:
