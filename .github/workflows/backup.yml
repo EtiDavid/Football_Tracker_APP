@@ -7,13 +7,9 @@ on:
     - cron: "0 1 * * *"
   workflow_call:
     secrets:
-      mongodb_uri:
+      MONGODB_URI:
         required: true
     inputs:
-      mongodb_uri:
-        description: "MongoDB connection string"
-        required: false
-        type: string
       os-version:
         description: "Runner OS"
         required: false
