@@ -1,6 +1,8 @@
 name: Backup
 
 on:
+  workflow_dispatch:
+
   schedule:
     - cron: "0 1 * * *"
   workflow_call:
@@ -29,7 +31,7 @@ jobs:
       outcomes: ${{ steps.log.outputs.info }}
     environment: football_tracker
     env:
-      MONGODB_URI: ${{ secrets.MONGODB_URI || inputs.mongodb_uri }}
+      MONGODB_URI: ${{ secrets.MONGODB_URI }}
     strategy:
       matrix:
         os: ${{ fromJSON(inputs.os-version) }}

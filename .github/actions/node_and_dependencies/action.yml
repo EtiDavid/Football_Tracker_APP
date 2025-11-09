@@ -18,6 +18,10 @@ runs:
         cache: 'npm'
         cache-dependency-path: ${{ inputs.cache-dependency-path }}
 
+    - name: Verify npm cache
+      run: npm cache verify
+      shell: bash
+
 
     - name: Install dependencies
       id: cache
